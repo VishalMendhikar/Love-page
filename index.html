@@ -3,109 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Wife</title>
+    <title>For You ❤️</title>
     <style>
         body {
+            height: 100vh;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #fff0f3;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            background-color: #ffe6e6;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Prevents scrollbars when button moves */
         }
 
         h1 {
-            color: #d90429;
+            color: #ff4d4d;
             font-size: 3rem;
+            text-align: center;
             margin-bottom: 30px;
-            text-align: center;
         }
 
-        .container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+        /* This container forces them to sit side-by-side with a gap */
+        .button-wrapper {
+            display: flex;
+            gap: 40px; 
+            align-items: center;
         }
 
-        button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            cursor: pointer;
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.5rem;
             border: none;
-            border-radius: 50px;
-            transition: transform 0.2s;
-            margin: 10px;
-            min-width: 120px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            /* CRITICAL: No absolute or fixed positioning here initially! */
         }
 
         #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
+            background-color: #4CAF50;
         }
 
         #noBtn {
-            background-color: #8d99ae;
-            color: white;
-            position: absolute;
-        }
-
-        .success-message {
-            display: none;
-            color: #d90429;
-            font-size: 2rem;
-            font-weight: bold;
-            animation: heartBeat 1.2s infinite;
-        }
-
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
+            background-color: #f44336;
+            transition: top 0.2s ease, left 0.2s ease; /* Makes the movement smooth */
         }
     </style>
 </head>
 <body>
 
-    <div id="mainContent">
-        <h1>I love you! ❤️</h1>
-        <div class="container">
-            <button id="yesBtn" onclick="celebrate()">Yes</button>
-            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
-        </div>
-    </div>
-
-    <div id="success" class="success-message">
-        I KNEW IT! ❤️
+    <h1 id="message">Do you love me? 💖</h1>
+    
+    <div class="button-wrapper" id="btnWrapper">
+        <button class="btn" id="yesBtn" onclick="yesClicked()">Yes</button>
+        <button class="btn" id="noBtn" onmouseover="moveNo()" onclick="moveNo()">No</button>
     </div>
 
     <script>
         const noBtn = document.getElementById('noBtn');
-        const mainContent = document.getElementById('mainContent');
-        const success = document.getElementById('success');
 
-        function moveButton() {
-            // Get random coordinates within the visible window
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        function moveNo() {
+            // 1. Change to absolute ONLY when hovered, so it breaks free from the side-by-side layout
+            noBtn.style.position = 'absolute';
             
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
+            // 2. Calculate safe screen limits so it doesn't go off-screen
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            // 3. Generate random coordinates
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            // 4. Apply the new coordinates
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
 
-        function celebrate() {
-            mainContent.style.display = 'none';
-            success.style.display = 'block';
+        function yesClicked() {
+            document.getElementById('message').innerHTML = "I knew it! ❤️ Let's celebrate!";
+            document.getElementById('btnWrapper').style.display = 'none';
+            document.body.style.backgroundColor = '#ffcccc';
         }
     </script>
 </body>
